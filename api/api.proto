@@ -1,0 +1,14 @@
+syntax = "proto3";
+package api;
+message PortMessage {
+    bytes data = 1;
+}
+
+message PortIDMessage {
+    string id = 1;
+  }
+
+service Port {
+  rpc SavePort(PortMessage) returns (PortMessage) {}
+  rpc GetPort(PortIDMessage) returns (PortMessage) {}
+}

@@ -1,0 +1,31 @@
+version: '3'
+
+# Define services
+services:
+
+  # Port Service
+  port:
+    # Configuration for building the docker image for the service
+    build:
+      context: . # Use an image built from the specified dockerfile in the current directory.
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on: 
+      - mongo # This service depends on redis. Start that first.
+    environment: # Pass environment variables to the service
+      MONGO_URL:  mongo:27017
+      MONGO_DB_NAME: port_service
+      PORT_SERVICE_ADDR: :7777
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+
+  # Mongo Service   
+  mongo:
+    image: "mongo" # Use a public Mongo image to build the mongo service    
+    restart: unless-stopped
+    networks:
+      - backend
+
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
